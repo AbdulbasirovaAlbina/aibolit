@@ -1,0 +1,131 @@
+<Window x:Class="Aibolit.AddOwnerPetWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Добавить владельца и питомца" 
+        Height="600" 
+        Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0" 
+                  Text="Добавление нового владельца и питомца" 
+                  FontSize="18" 
+                  FontWeight="Bold" 
+                  Margin="0,0,0,20"/>
+        
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <GroupBox Header="Данные владельца" Margin="0,0,0,15">
+                    <StackPanel Margin="10">
+                        <TextBlock Text="Фамилия:" Margin="0,5"/>
+                        <TextBox x:Name="OwnerSurnameTextBox" Margin="0,5,0,10"/>
+                        
+                        <TextBlock Text="Имя:" Margin="0,5"/>
+                        <TextBox x:Name="OwnerNameTextBox" Margin="0,5,0,10"/>
+                        
+                        <TextBlock Text="Отчество:" Margin="0,5"/>
+                        <TextBox x:Name="OwnerMiddleNameTextBox" Margin="0,5,0,10"/>
+                        
+                        <TextBlock Text="Телефон (11 цифр):" Margin="0,5"/>
+                        <TextBox x:Name="OwnerPhoneTextBox" Margin="0,5,0,10"/>
+                        
+                        <TextBlock Text="Адрес:" Margin="0,5"/>
+                        <TextBox x:Name="OwnerAddressTextBox" Margin="0,5,0,10"/>
+                        
+                        <TextBlock Text="Email:" Margin="0,5"/>
+                        <TextBox x:Name="OwnerEmailTextBox" Margin="0,5,0,10"/>
+                    </StackPanel>
+                </GroupBox>
+                
+                <GroupBox Header="Данные питомца">
+                    <StackPanel Margin="10">
+                        <TextBlock Text="Имя питомца:" Margin="0,5"/>
+                        <TextBox x:Name="PetNameTextBox" Margin="0,5,0,10"/>
+                        
+                        <TextBlock Text="Вид:" Margin="0,5"/>
+                        <TextBox x:Name="PetViewTextBox" Margin="0,5,0,10"/>
+                        
+                        <TextBlock Text="Порода:" Margin="0,5"/>
+                        <TextBox x:Name="PetSpeciesTextBox" Margin="0,5,0,10"/>
+                        
+                        <TextBlock Text="Дата рождения (YYYY-MM-DD):" Margin="0,5"/>
+                        <TextBox x:Name="PetBirthDateTextBox" Margin="0,5,0,10"/>
+                        
+                        <TextBlock Text="Цвет:" Margin="0,5"/>
+                        <TextBox x:Name="PetColorTextBox" Margin="0,5,0,10"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+        
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Сохранить" 
+                   Padding="20,5"
+                   Background="#27AE60"
+                   Foreground="White"
+                   BorderThickness="0"
+                   Cursor="Hand"
+                   Click="SaveButton_Click"
+                   Margin="0,0,10,0">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                           CornerRadius="3" 
+                                           Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                        VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#229954"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="Отмена" 
+                   Padding="20,5"
+                   Background="#95A5A6"
+                   Foreground="White"
+                   BorderThickness="0"
+                   Cursor="Hand"
+                   Click="CancelButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                           CornerRadius="3" 
+                                           Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                        VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#7F8C8D"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
+
+

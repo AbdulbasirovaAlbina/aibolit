@@ -1,0 +1,93 @@
+<Window x:Class="Aibolit.DeleteAppointmentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Удалить запись на приём" 
+        Height="350" 
+        Width="400"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Grid Margin="20">
+        <StackPanel>
+            <TextBlock Text="Удаление записи на приём" 
+                      FontSize="18" 
+                      FontWeight="Bold" 
+                      Margin="0,0,0,20"/>
+            
+            <TextBlock Text="Дата записи (YYYY-MM-DD):" Margin="0,5"/>
+            <TextBox x:Name="DateTextBox" Margin="0,5,0,10"/>
+            
+            <TextBlock Text="Время начала (HH:MM):" Margin="0,5"/>
+            <TextBox x:Name="StartTimeTextBox" Margin="0,5,0,10"/>
+            
+            <TextBlock Text="Фамилия ветеринара:" Margin="0,5"/>
+            <ComboBox x:Name="VetSurnameComboBox" Margin="0,5,0,10" IsEditable="True"/>
+            
+            <TextBlock Text="Имя ветеринара:" Margin="0,5"/>
+            <ComboBox x:Name="VetNameComboBox" Margin="0,5,0,20"/>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Удалить" 
+                       Padding="20,5"
+                       Background="#E74C3C"
+                       Foreground="White"
+                       BorderThickness="0"
+                       Cursor="Hand"
+                       Click="DeleteButton_Click"
+                       Margin="0,0,10,0">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                               CornerRadius="3" 
+                                               Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" 
+                                                            VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#C0392B"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="Отмена" 
+                       Padding="20,5"
+                       Background="#95A5A6"
+                       Foreground="White"
+                       BorderThickness="0"
+                       Cursor="Hand"
+                       Click="CancelButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                               CornerRadius="3" 
+                                               Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" 
+                                                            VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#7F8C8D"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
+
+
