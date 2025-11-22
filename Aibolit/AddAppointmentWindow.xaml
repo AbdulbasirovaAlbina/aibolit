@@ -13,23 +13,28 @@
                       FontWeight="Bold" 
                       Margin="0,0,0,20"/>
             
-            <TextBlock Text="Фамилия ветеринара:" Margin="0,5"/>
-            <ComboBox x:Name="VetSurnameComboBox" Margin="0,5,0,10" IsEditable="True"/>
+            <TextBlock Text="Ветеринар *" Margin="0,5"/>
+            <ComboBox x:Name="VeterinarianComboBox" Margin="0,5,0,15" IsEditable="True"/>
             
-            <TextBlock Text="Имя ветеринара:" Margin="0,5"/>
-            <ComboBox x:Name="VetNameComboBox" Margin="0,5,0,10" IsEditable="True"/>
+            <TextBlock Text="Название услуги *" Margin="0,5"/>
+            <ComboBox x:Name="ServiceComboBox" Margin="0,5,0,15" IsEditable="True"/>
             
-            <TextBlock Text="Название услуги:" Margin="0,5"/>
-            <ComboBox x:Name="ServiceComboBox" Margin="0,5,0,10" IsEditable="True"/>
+            <TextBlock Text="Дата записи *" Margin="0,5"/>
+            <DatePicker x:Name="DatePicker" 
+                       Width="200" HorizontalAlignment="Left"
+                       FontSize="14" Margin="0,5,0,15"/>
             
-            <TextBlock Text="Дата (YYYY-MM-DD):" Margin="0,5"/>
-            <TextBox x:Name="DateTextBox" Margin="0,5,0,10"/>
+            <TextBlock Text="Время начала *" Margin="0,5"/>
+            <TextBox x:Name="StartTimeTextBox" 
+                    Width="150" HorizontalAlignment="Left"
+                    FontSize="14" Margin="0,5,0,15"
+                    ToolTip="Формат: HH:MM (например, 09:00)"/>
             
-            <TextBlock Text="Время начала (HH:MM):" Margin="0,5"/>
-            <TextBox x:Name="StartTimeTextBox" Margin="0,5,0,10"/>
-            
-            <TextBlock Text="Время окончания (HH:MM):" Margin="0,5"/>
-            <TextBox x:Name="EndTimeTextBox" Margin="0,5,0,20"/>
+            <TextBlock Text="Время окончания *" Margin="0,5"/>
+            <TextBox x:Name="EndTimeTextBox" 
+                    Width="150" HorizontalAlignment="Left"
+                    FontSize="14" Margin="0,5,0,20"
+                    ToolTip="Формат: HH:MM (например, 10:30)"/>
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Сохранить" 

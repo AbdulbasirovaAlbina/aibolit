@@ -88,7 +88,8 @@
                  SelectionMode="Single"
                  GridLinesVisibility="All"
                  HeadersVisibility="Column"
-                 AlternatingRowBackground="#F8F9FA"/>
+                 AlternatingRowBackground="#F8F9FA"
+                 MouseDoubleClick="OwnersPetsDataGrid_MouseDoubleClick"/>
     </Grid>
 </Page>
 

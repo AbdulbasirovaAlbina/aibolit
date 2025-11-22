@@ -21,21 +21,15 @@ namespace Aibolit
         {
             try
             {
-                // Загрузка фамилий ветеринаров
-                var vetSurnames = dbHelper.ExecuteQuery("SELECT DISTINCT Surname FROM Veterinarian ORDER BY Surname");
-                foreach (DataRow row in vetSurnames.Rows)
+                // Загружаем ветеринаров с полным ФИО
+                var veterinarians = dbHelper.ExecuteQuery(
+                    "SELECT ID_Veterinarian, Surname || ' ' || Name || ' ' || COALESCE(Middle_Name, '') AS FullName " +
+                    "FROM Veterinarian ORDER BY Surname, Name");
+                foreach (DataRow row in veterinarians.Rows)
                 {
-                    VetSurnameComboBox.Items.Add(row["Surname"].ToString());
+                    VeterinarianComboBox.Items.Add(row["FullName"].ToString().Trim());
                 }
 
-                // Загрузка имен ветеринаров
-                var vetNames = dbHelper.ExecuteQuery("SELECT DISTINCT Name FROM Veterinarian ORDER BY Name");
-                foreach (DataRow row in vetNames.Rows)
-                {
-                    VetNameComboBox.Items.Add(row["Name"].ToString());
-                }
-
-                // Загрузка услуг
                 var services = dbHelper.ExecuteQuery("SELECT Name FROM Service ORDER BY Name");
                 foreach (DataRow row in services.Rows)
                 {
@@ -52,10 +46,9 @@ namespace Aibolit
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(VetSurnameComboBox.Text) ||
-                    string.IsNullOrWhiteSpace(VetNameComboBox.Text) ||
+                if (string.IsNullOrWhiteSpace(VeterinarianComboBox.Text) ||
                     string.IsNullOrWhiteSpace(ServiceComboBox.Text) ||
-                    string.IsNullOrWhiteSpace(DateTextBox.Text) ||
+                    DatePicker.SelectedDate == null ||
                     string.IsNullOrWhiteSpace(StartTimeTextBox.Text) ||
                     string.IsNullOrWhiteSpace(EndTimeTextBox.Text))
                 {
@@ -67,40 +60,123 @@ namespace Aibolit
                 {
                     conn.Open();
                     
-                    var vetSurname = VetSurnameComboBox.Text;
-                    var vetName = VetNameComboBox.Text;
+                    var vetFullName = VeterinarianComboBox.Text.Trim();
                     var serviceName = ServiceComboBox.Text;
-                    var appDate = DateTime.Parse(DateTextBox.Text).Date;
-                    var startTime = TimeSpan.Parse(StartTimeTextBox.Text);
-                    var endTime = TimeSpan.Parse(EndTimeTextBox.Text);
+                    var appDate = DatePicker.SelectedDate.Value.Date;
                     
-                    try
+                    if (!TimeSpan.TryParse(StartTimeTextBox.Text, out TimeSpan startTime))
                     {
-                        using (var cmd = new NpgsqlCommand("CALL \"AddAppointment\"(@vet_surname, @vet_name, @service_name, @app_date, @start_time, @end_time)", conn))
+                        MessageBox.Show("Неверный формат времени начала. Используйте формат HH:MM (например, 09:00)",
+                            "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    
+                    if (!TimeSpan.TryParse(EndTimeTextBox.Text, out TimeSpan endTime))
+                    {
+                        MessageBox.Show("Неверный формат времени окончания. Используйте формат HH:MM (например, 10:30)",
+                            "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    
+                    if (startTime >= endTime)
+                    {
+                        MessageBox.Show("Время окончания должно быть больше времени начала",
+                            "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    
+                    // Парсим ФИО ветеринара
+                    var nameParts = vetFullName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (nameParts.Length < 2)
+                    {
+                        MessageBox.Show("Неверный формат ФИО ветеринара. Ожидается: Фамилия Имя Отчество",
+                            "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    
+                    var vetSurname = nameParts[0];
+                    var vetName = nameParts[1];
+                    string vetMiddleName = nameParts.Length > 2 ? nameParts[2] : null;
+                    
+                    int? vetId = null;
+                    using (var cmd = new NpgsqlCommand(
+                        "SELECT ID_Veterinarian FROM Veterinarian WHERE Surname = @Surname AND Name = @Name " +
+                        "AND (Middle_Name = @Middle_Name OR (Middle_Name IS NULL AND @Middle_Name IS NULL))", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Surname", vetSurname);
+                        cmd.Parameters.AddWithValue("@Name", vetName);
+                        if (vetMiddleName != null)
                         {
-                            cmd.Parameters.AddWithValue("@vet_surname", vetSurname);
-                            cmd.Parameters.AddWithValue("@vet_name", vetName);
-                            cmd.Parameters.AddWithValue("@service_name", serviceName);
-                            cmd.Parameters.AddWithValue("@app_date", appDate);
-                            cmd.Parameters.AddWithValue("@start_time", startTime);
-                            cmd.Parameters.AddWithValue("@end_time", endTime);
-                            
-                            cmd.ExecuteNonQuery();
+                            cmd.Parameters.AddWithValue("@Middle_Name", vetMiddleName);
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@Middle_Name", DBNull.Value);
+                        }
+                        var result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                        {
+                            vetId = Convert.ToInt32(result);
                         }
                     }
-                    catch (Npgsql.PostgresException ex) when (ex.SqlState == "42883")
+                    
+                    if (vetId == null)
                     {
-                        using (var cmd = new NpgsqlCommand("CALL addappointment(@vet_surname, @vet_name, @service_name, @app_date, @start_time, @end_time)", conn))
+                        MessageBox.Show("Врач с указанными именем и фамилией не найден",
+                            "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    
+                    int? serviceId = null;
+                    using (var cmd = new NpgsqlCommand(
+                        "SELECT ID_Service FROM Service WHERE Name = @Name", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Name", serviceName);
+                        var result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
                         {
-                            cmd.Parameters.AddWithValue("@vet_surname", vetSurname);
-                            cmd.Parameters.AddWithValue("@vet_name", vetName);
-                            cmd.Parameters.AddWithValue("@service_name", serviceName);
-                            cmd.Parameters.AddWithValue("@app_date", appDate);
-                            cmd.Parameters.AddWithValue("@start_time", startTime);
-                            cmd.Parameters.AddWithValue("@end_time", endTime);
-                            
-                            cmd.ExecuteNonQuery();
+                            serviceId = Convert.ToInt32(result);
                         }
+                    }
+                    
+                    if (serviceId == null)
+                    {
+                        MessageBox.Show("Услуга с указанным названием не найдена",
+                            "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    
+                    bool timeConflict = false;
+                    using (var cmd = new NpgsqlCommand(
+                        "SELECT EXISTS(SELECT 1 FROM Appointment WHERE ID_Veterinarian = @ID_Veterinarian " +
+                        "AND Date = @Date AND ((Start_Time_Appointment < @End_Time AND Start_Time_Appointment >= @Start_Time) " +
+                        "OR (End_Time_Appointment > @Start_Time AND End_Time_Appointment <= @End_Time)))", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID_Veterinarian", vetId.Value);
+                        cmd.Parameters.AddWithValue("@Date", appDate);
+                        cmd.Parameters.AddWithValue("@Start_Time", startTime);
+                        cmd.Parameters.AddWithValue("@End_Time", endTime);
+                        timeConflict = Convert.ToBoolean(cmd.ExecuteScalar());
+                    }
+                    
+                    if (timeConflict)
+                    {
+                        MessageBox.Show("Время для выбранного ветеринара уже занято, выберите другое время",
+                            "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    
+                    using (var cmd = new NpgsqlCommand(
+                        "INSERT INTO Appointment (Date, Start_Time_Appointment, End_Time_Appointment, ID_Veterinarian, ID_Service) " +
+                        "VALUES (@Date, @Start_Time, @End_Time, @ID_Veterinarian, @ID_Service)", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Date", appDate);
+                        cmd.Parameters.AddWithValue("@Start_Time", startTime);
+                        cmd.Parameters.AddWithValue("@End_Time", endTime);
+                        cmd.Parameters.AddWithValue("@ID_Veterinarian", vetId.Value);
+                        cmd.Parameters.AddWithValue("@ID_Service", serviceId.Value);
+                        
+                        cmd.ExecuteNonQuery();
                     }
                 }
 

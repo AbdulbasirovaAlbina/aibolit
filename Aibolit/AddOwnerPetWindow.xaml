@@ -1,117 +1,109 @@
 <Window x:Class="Aibolit.AddOwnerPetWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Добавить владельца и питомца" 
-        Height="600" 
-        Width="500"
+        Title="Добавить владельца и питомца"
+        Height="650" Width="520"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize">
-    <Grid Margin="20">
+        ResizeMode="NoResize"
+        Background="#F8F9FA">
+    <Grid Margin="25">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-        <TextBlock Grid.Row="0" 
-                  Text="Добавление нового владельца и питомца" 
-                  FontSize="18" 
-                  FontWeight="Bold" 
-                  Margin="0,0,0,20"/>
-        
+
+        <TextBlock Text="Добавление нового владельца и питомца"
+                   FontSize="20" FontWeight="SemiBold"
+                   Foreground="#2C3E50" HorizontalAlignment="Center"
+                   Margin="0,0,0,25"/>
+
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <GroupBox Header="Данные владельца" Margin="0,0,0,15">
-                    <StackPanel Margin="10">
-                        <TextBlock Text="Фамилия:" Margin="0,5"/>
-                        <TextBox x:Name="OwnerSurnameTextBox" Margin="0,5,0,10"/>
-                        
-                        <TextBlock Text="Имя:" Margin="0,5"/>
-                        <TextBox x:Name="OwnerNameTextBox" Margin="0,5,0,10"/>
-                        
-                        <TextBlock Text="Отчество:" Margin="0,5"/>
-                        <TextBox x:Name="OwnerMiddleNameTextBox" Margin="0,5,0,10"/>
-                        
-                        <TextBlock Text="Телефон (11 цифр):" Margin="0,5"/>
-                        <TextBox x:Name="OwnerPhoneTextBox" Margin="0,5,0,10"/>
-                        
-                        <TextBlock Text="Адрес:" Margin="0,5"/>
-                        <TextBox x:Name="OwnerAddressTextBox" Margin="0,5,0,10"/>
-                        
-                        <TextBlock Text="Email:" Margin="0,5"/>
-                        <TextBox x:Name="OwnerEmailTextBox" Margin="0,5,0,10"/>
+                <GroupBox Header="Данные владельца" FontWeight="Bold"
+                          Foreground="#2C3E50" BorderBrush="#BDC3C7" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <TextBlock Text="Фамилия *" Margin="0,0,0,5"/>
+                        <TextBox x:Name="OwnerSurnameTextBox" Padding="8" FontSize="14" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Имя *" Margin="0,0,0,5"/>
+                        <TextBox x:Name="OwnerNameTextBox" Padding="8" FontSize="14" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Отчество" Margin="0,0,0,5"/>
+                        <TextBox x:Name="OwnerMiddleNameTextBox" Padding="8" FontSize="14" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Телефон *" Margin="0,0,0,5"/>
+                        <TextBox x:Name="OwnerPhoneTextBox"
+                                 Padding="8" FontSize="16" FontFamily="Consolas"
+                                 Width="250" HorizontalAlignment="Left"
+                                 TextChanged="OwnerPhoneTextBox_TextChanged"/>
+
+                        <TextBlock Text="Адрес *" Margin="0,0,0,5"/>
+                        <TextBox x:Name="OwnerAddressTextBox" Padding="8" FontSize="14" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Email" Margin="0,0,0,5"/>
+                        <TextBox x:Name="OwnerEmailTextBox" Padding="8" FontSize="14" Margin="0,0,0,10"/>
                     </StackPanel>
                 </GroupBox>
-                
-                <GroupBox Header="Данные питомца">
-                    <StackPanel Margin="10">
-                        <TextBlock Text="Имя питомца:" Margin="0,5"/>
-                        <TextBox x:Name="PetNameTextBox" Margin="0,5,0,10"/>
-                        
-                        <TextBlock Text="Вид:" Margin="0,5"/>
-                        <TextBox x:Name="PetViewTextBox" Margin="0,5,0,10"/>
-                        
-                        <TextBlock Text="Порода:" Margin="0,5"/>
-                        <TextBox x:Name="PetSpeciesTextBox" Margin="0,5,0,10"/>
-                        
-                        <TextBlock Text="Дата рождения (YYYY-MM-DD):" Margin="0,5"/>
-                        <TextBox x:Name="PetBirthDateTextBox" Margin="0,5,0,10"/>
-                        
-                        <TextBlock Text="Цвет:" Margin="0,5"/>
-                        <TextBox x:Name="PetColorTextBox" Margin="0,5,0,10"/>
+
+                <GroupBox Header="Данные питомца" FontWeight="Bold"
+                          Foreground="#2C3E50" BorderBrush="#BDC3C7">
+                    <StackPanel Margin="15">
+                        <TextBlock Text="Имя питомца *" Margin="0,0,0,5"/>
+                        <TextBox x:Name="PetNameTextBox" Padding="8" FontSize="14" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Вид *" Margin="0,0,0,5"/>
+                        <TextBox x:Name="PetViewTextBox" Padding="8" FontSize="14" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Порода *" Margin="0,0,0,5"/>
+                        <TextBox x:Name="PetSpeciesTextBox" Padding="8" FontSize="14" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Дата рождения *" Margin="0,0,0,5"/>
+                        <DatePicker x:Name="PetBirthDatePicker"
+                                    Width="200" HorizontalAlignment="Left"
+                                    FontSize="14" Margin="0,0,0,15"/>
+
+                        <TextBlock Text="Цвет/окрас *" Margin="0,0,0,5"/>
+                        <TextBox x:Name="PetColorTextBox" Padding="8" FontSize="14" Margin="0,0,0,10"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
         </ScrollViewer>
-        
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-            <Button Content="Сохранить" 
-                   Padding="20,5"
-                   Background="#27AE60"
-                   Foreground="White"
-                   BorderThickness="0"
-                   Cursor="Hand"
-                   Click="SaveButton_Click"
-                   Margin="0,0,10,0">
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,25,0,10">
+            <Button Content="Сохранить" Width="120" Height="40"
+                    Background="#27AE60" Foreground="White" FontWeight="SemiBold"
+                    Click="SaveButton_Click" Margin="0,0,10,0">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" 
-                                           CornerRadius="3" 
-                                           Padding="{TemplateBinding Padding}">
-                                        <ContentPresenter HorizontalAlignment="Center" 
-                                                        VerticalAlignment="Center"/>
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="10">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#229954"/>
+                                <Setter Property="Background" Value="#219653"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Content="Отмена" 
-                   Padding="20,5"
-                   Background="#95A5A6"
-                   Foreground="White"
-                   BorderThickness="0"
-                   Cursor="Hand"
-                   Click="CancelButton_Click">
+
+            <Button Content="Отмена" Width="100" Height="40"
+                    Background="#95A5A6" Foreground="White" FontWeight="SemiBold"
+                    Click="CancelButton_Click">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" 
-                                           CornerRadius="3" 
-                                           Padding="{TemplateBinding Padding}">
-                                        <ContentPresenter HorizontalAlignment="Center" 
-                                                        VerticalAlignment="Center"/>
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="10">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -127,5 +119,3 @@
         </StackPanel>
     </Grid>
 </Window>
-
-

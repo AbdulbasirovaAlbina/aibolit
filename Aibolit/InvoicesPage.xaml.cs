@@ -22,15 +22,19 @@ namespace Aibolit
             {
                 string query = @"
                     SELECT 
-                        Check_Number AS Номер_Чека,
-                        Check_Date AS Дата,
-                        Veterinarian_Name AS Ветеринар,
-                        Pet_Info AS Информация_О_Питомце,
-                        Service_Name AS Услуга,
-                        Service_Description AS Описание,
-                        Service_Cost AS Стоимость
-                    FROM Invoice_Check
-                    ORDER BY Check_Date DESC";
+                        'ЧЕК № ' || a.ID_Appointment AS Номер_Чека,
+                        'Дата: ' || TO_CHAR(a.Date, 'YYYY-MM-DD') AS Дата,
+                        'Ветеринар: ' || v.Surname || ' ' || v.Name || ' ' || v.Middle_Name AS Ветеринар,
+                        'Пациент: ' || p.Name || ' (вид: ' || p.View || ', порода: ' || p.Species || ')' AS Информация_О_Питомце,
+                        'Услуга: ' || s.Name AS Услуга,
+                        'Описание: ' || s.Description AS Описание,
+                        'Стоимость: ' || TO_CHAR(s.Cost, '99999.99') || ' руб.' AS Стоимость
+                    FROM Appointment a
+                    JOIN Service s ON a.ID_Service = s.ID_Service
+                    JOIN Veterinarian v ON a.ID_Veterinarian = v.ID_Veterinarian
+                    JOIN Questionnaire q ON a.ID_Appointment = q.ID_Appointment
+                    JOIN Patient p ON q.ID_Pet = p.ID_Pet
+                    ORDER BY a.Date DESC, p.Name ASC";
                 
                 var dataTable = dbHelper.ExecuteQuery(query);
                 InvoicesDataGrid.ItemsSource = dataTable.DefaultView;
@@ -47,5 +51,4 @@ namespace Aibolit
         }
     }
 }
-
 

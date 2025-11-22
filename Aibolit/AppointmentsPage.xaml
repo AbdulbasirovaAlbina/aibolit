@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="400" d:DesignWidth="800"
       Title="Записи на приём">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -43,66 +43,6 @@
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#229954"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Content="Изменить время" 
-                   Padding="15,5"
-                   Background="#F39C12"
-                   Foreground="White"
-                   BorderThickness="0"
-                   Cursor="Hand"
-                   Click="UpdateTimeButton_Click"
-                   Margin="10,0,0,0">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" 
-                                           CornerRadius="3" 
-                                           Padding="{TemplateBinding Padding}">
-                                        <ContentPresenter HorizontalAlignment="Center" 
-                                                        VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#E67E22"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Content="Удалить запись" 
-                   Padding="15,5"
-                   Background="#E74C3C"
-                   Foreground="White"
-                   BorderThickness="0"
-                   Cursor="Hand"
-                   Click="DeleteAppointmentButton_Click"
-                   Margin="10,0,0,0">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" 
-                                           CornerRadius="3" 
-                                           Padding="{TemplateBinding Padding}">
-                                        <ContentPresenter HorizontalAlignment="Center" 
-                                                        VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#C0392B"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -148,7 +88,9 @@
                  SelectionMode="Single"
                  GridLinesVisibility="All"
                  HeadersVisibility="Column"
-                 AlternatingRowBackground="#F8F9FA"/>
+                 AlternatingRowBackground="#F8F9FA"
+                 MouseDoubleClick="AppointmentsDataGrid_MouseDoubleClick"
+                 AutoGeneratingColumn="AppointmentsDataGrid_AutoGeneratingColumn"/>
     </Grid>
 </Page>
 

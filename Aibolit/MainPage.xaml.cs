@@ -9,6 +9,8 @@ namespace Aibolit
         public MainPage()
         {
             InitializeComponent();
+            // При загрузке сразу открываем страницу "Владельцы и питомцы"
+            ContentFrame.Navigate(new OwnersPetsPage());
         }
 
         private void OwnersPetsButton_Click(object sender, RoutedEventArgs e)
@@ -34,6 +36,11 @@ namespace Aibolit
         private void StatisticsButton_Click(object sender, RoutedEventArgs e)
         {
             ContentFrame.Navigate(new StatisticsPage());
+        }
+
+        private void ServicesButton_Click(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Navigate(new ServicesPage());
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

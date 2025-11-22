@@ -23,18 +23,16 @@ namespace Aibolit
             {
                 string query = @"
                     SELECT 
-                        o.ID_Owner,
                         o.Surname AS Фамилия,
                         o.Name AS Имя,
                         o.Middle_Name AS Отчество,
                         o.Phone AS Телефон,
                         o.Address AS Адрес,
                         o.Email AS Email,
-                        p.ID_Pet,
                         p.Name AS Имя_Питомца,
                         p.View AS Вид,
                         p.Species AS Порода,
-                        p.Year_Of_Birth AS Дата_Рождения,
+                        TO_CHAR(p.Year_Of_Birth, 'YYYY-MM-DD') AS Дата_Рождения,
                         p.Color AS Цвет
                     FROM Owner o
                     LEFT JOIN Patient p ON o.ID_Owner = p.ID_Owner
@@ -62,7 +60,29 @@ namespace Aibolit
         {
             LoadData();
         }
+
+        private void OwnersPetsDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (OwnersPetsDataGrid.SelectedItem != null)
+            {
+                try
+                {
+                    DataRowView rowView = OwnersPetsDataGrid.SelectedItem as DataRowView;
+                    if (rowView != null)
+                    {
+                        var dialog = new EditOwnerPetWindow(dbHelper, rowView.Row);
+                        if (dialog.ShowDialog() == true)
+                        {
+                            LoadData();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при открытии окна редактирования: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
     }
 }
-
 
