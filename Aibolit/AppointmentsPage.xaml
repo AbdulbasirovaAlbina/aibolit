@@ -78,13 +78,13 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Content="Обновить" 
+            <Button Content="Печать чека"
                    Padding="15,5"
-                   Background="#3498DB"
+                   Background="#2C3E50"
                    Foreground="White"
                    BorderThickness="0"
                    Cursor="Hand"
-                   Click="RefreshButton_Click"
+                   Click="PrintReceiptButton_Click"
                    Margin="10,0,0,0">
                 <Button.Style>
                     <Style TargetType="Button">
@@ -102,7 +102,7 @@
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#2980B9"/>
+                                <Setter Property="Background" Value="#1F2A36"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>

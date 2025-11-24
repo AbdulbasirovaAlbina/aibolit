@@ -64,7 +64,7 @@
             <!-- Боковое меню -->
             <Border Grid.Column="0" Background="#ECF0F1" BorderBrush="#BDC3C7" BorderThickness="0,0,1,0">
                 <StackPanel Margin="10">
-                    <Button Content="Владельцы и питомцы" 
+            <Button Content="Владельцы и питомцы" 
                            Margin="0,5" 
                            Padding="15,10"
                            FontSize="14"
@@ -128,7 +128,7 @@
                         </Button.Style>
                     </Button>
                     
-                    <Button Content="Карты пациентов" 
+            <Button Content="Карты пациентов" 
                            Margin="0,5" 
                            Padding="15,10"
                            FontSize="14"
@@ -160,7 +160,7 @@
                         </Button.Style>
                     </Button>
                     
-                    <Button Content="Чеки" 
+            <Button Content="Чеки" 
                            Margin="0,5" 
                            Padding="15,10"
                            FontSize="14"
@@ -192,7 +192,7 @@
                         </Button.Style>
                     </Button>
                     
-                    <Button Content="Статистика ветеринаров" 
+            <Button Content="Статистика ветеринаров" 
                            Margin="0,5" 
                            Padding="15,10"
                            FontSize="14"
@@ -224,7 +224,7 @@
                         </Button.Style>
                     </Button>
                     
-                    <Button Content="Услуги" 
+            <Button Content="Услуги" 
                            Margin="0,5" 
                            Padding="15,10"
                            FontSize="14"

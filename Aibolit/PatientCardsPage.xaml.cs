@@ -13,8 +13,10 @@ namespace Aibolit
         {
             InitializeComponent();
             dbHelper = new DatabaseHelper();
-            LoadData();
+            Loaded += PatientCardsPage_Loaded;
         }
+
+        private void PatientCardsPage_Loaded(object sender, RoutedEventArgs e) => LoadData();
 
         private void LoadData()
         {
@@ -59,11 +61,6 @@ namespace Aibolit
             {
                 MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadData();
         }
 
         private void PatientCardsDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)

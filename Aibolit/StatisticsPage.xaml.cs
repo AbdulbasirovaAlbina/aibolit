@@ -18,9 +18,11 @@ namespace Aibolit
             // Устанавливаем даты по умолчанию: последние 30 дней
             EndDatePicker.SelectedDate = DateTime.Today;
             StartDatePicker.SelectedDate = DateTime.Today.AddDays(-30);
-            
-            LoadData();
+
+            Loaded += StatisticsPage_Loaded;
         }
+
+        private void StatisticsPage_Loaded(object sender, RoutedEventArgs e) => LoadData();
 
         private void LoadData()
         {
@@ -45,6 +47,7 @@ namespace Aibolit
                     SELECT 
                         v.Surname AS Фамилия,
                         v.Name AS Имя,
+                        COALESCE(v.Middle_Name, '') AS Отчество,
                         COUNT(DISTINCT a.ID_Pet) AS ""Количество пациентов"",
                         COUNT(a.ID_Appointment) AS ""Количество приёмов""
                     FROM Veterinarian v
@@ -52,7 +55,7 @@ namespace Aibolit
                         ON v.ID_Veterinarian = a.ID_Veterinarian
                         AND a.Date >= @StartDate
                         AND a.Date <= @EndDate
-                    GROUP BY v.Surname, v.Name
+                    GROUP BY v.Surname, v.Name, v.Middle_Name
                     ORDER BY ""Количество пациентов"" DESC, v.Surname";
                 
                 var dataTable = dbHelper.ExecuteQuery(query, 
@@ -64,11 +67,6 @@ namespace Aibolit
             {
                 MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadData();
         }
 
         private void StartDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)

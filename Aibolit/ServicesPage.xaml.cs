@@ -14,8 +14,10 @@ namespace Aibolit
         {
             InitializeComponent();
             dbHelper = new DatabaseHelper();
-            LoadData();
+            Loaded += ServicesPage_Loaded;
         }
+
+        private void ServicesPage_Loaded(object sender, RoutedEventArgs e) => LoadData();
 
         private void LoadData()
         {
@@ -46,11 +48,6 @@ namespace Aibolit
             {
                 LoadData();
             }
-        }
-
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadData();
         }
 
         private void ServicesDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)

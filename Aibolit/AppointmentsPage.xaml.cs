@@ -14,8 +14,10 @@ namespace Aibolit
         {
             InitializeComponent();
             dbHelper = new DatabaseHelper();
-            LoadData();
+            Loaded += AppointmentsPage_Loaded;
         }
+
+        private void AppointmentsPage_Loaded(object sender, RoutedEventArgs e) => LoadData();
 
         private void LoadData()
         {
@@ -61,11 +63,6 @@ namespace Aibolit
             {
                 LoadData();
             }
-        }
-
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadData();
         }
 
         private void AppointmentsDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -132,6 +129,29 @@ namespace Aibolit
                 LoadData();
             }
         }
+
+        private void PrintReceiptButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (AppointmentsDataGrid.SelectedItem is not DataRowView row)
+            {
+                MessageBox.Show("Выберите запись, чтобы распечатать чек", "Уведомление",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                string filePath = ReceiptExporter.GenerateReceipt(row.Row, DateTime.Now);
+                MessageBox.Show($"Чек сохранён в файле:\n{filePath}", "Готово",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не удалось сохранить чек: {ex.Message}", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
+
 

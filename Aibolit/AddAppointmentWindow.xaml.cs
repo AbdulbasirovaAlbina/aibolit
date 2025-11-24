@@ -132,8 +132,10 @@ namespace Aibolit
                     string vetMiddleName = nameParts.Length > 2 ? nameParts[2] : null;
                     
                     int? vetId = null;
+                    TimeSpan? vetStart = null;
+                    TimeSpan? vetEnd = null;
                     using (var cmd = new NpgsqlCommand(
-                        "SELECT ID_Veterinarian FROM Veterinarian WHERE Surname = @Surname AND Name = @Name " +
+                        "SELECT ID_Veterinarian, Start_Time_Day, End_Time_Day FROM Veterinarian WHERE Surname = @Surname AND Name = @Name " +
                         "AND (Middle_Name = @Middle_Name OR (Middle_Name IS NULL AND @Middle_Name IS NULL))", conn))
                     {
                         cmd.Parameters.AddWithValue("@Surname", vetSurname);
@@ -146,10 +148,14 @@ namespace Aibolit
                         {
                             cmd.Parameters.AddWithValue("@Middle_Name", DBNull.Value);
                         }
-                        var result = cmd.ExecuteScalar();
-                        if (result != null && result != DBNull.Value)
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            vetId = Convert.ToInt32(result);
+                            if (reader.Read())
+                            {
+                                vetId = reader.GetInt32(0);
+                                if (!reader.IsDBNull(1)) vetStart = reader.GetTimeSpan(1);
+                                if (!reader.IsDBNull(2)) vetEnd = reader.GetTimeSpan(2);
+                            }
                         }
                     }
                     
@@ -157,6 +163,20 @@ namespace Aibolit
                     {
                         MessageBox.Show("Врач с указанными именем и фамилией не найден",
                             "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    if (vetStart.HasValue && startTime < vetStart.Value)
+                    {
+                        MessageBox.Show($"Врач начинает работать в {vetStart:hh\\:mm}", "Ошибка",
+                            MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    if (vetEnd.HasValue && endTime > vetEnd.Value)
+                    {
+                        MessageBox.Show($"Врач заканчивает работу в {vetEnd:hh\\:mm}", "Ошибка",
+                            MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
                     

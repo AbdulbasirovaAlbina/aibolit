@@ -9,11 +9,16 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         
-        <!-- Заголовок и кнопки -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+        <!-- Заголовок и действия -->
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,0,0,10">
             <TextBlock Text="Владельцы и питомцы" 
                       FontSize="20" 
                       FontWeight="Bold" 
@@ -48,49 +53,64 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Content="Обновить" 
+            <Button Content="Показать все"
                    Padding="15,5"
+                   Margin="10,0,0,0"
                    Background="#3498DB"
                    Foreground="White"
                    BorderThickness="0"
                    Cursor="Hand"
-                   Click="RefreshButton_Click"
-                   Margin="10,0,0,0">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" 
-                                           CornerRadius="3" 
-                                           Padding="{TemplateBinding Padding}">
-                                        <ContentPresenter HorizontalAlignment="Center" 
-                                                        VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#2980B9"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
+                   Click="ResetFiltersButton_Click"/>
         </StackPanel>
-        
-        <!-- Таблица -->
-        <DataGrid x:Name="OwnersPetsDataGrid" 
-                 Grid.Row="1"
-                 AutoGenerateColumns="True"
-                 IsReadOnly="True"
-                 SelectionMode="Single"
-                 GridLinesVisibility="All"
-                 HeadersVisibility="Column"
-                 AlternatingRowBackground="#F8F9FA"
-                 MouseDoubleClick="OwnersPetsDataGrid_MouseDoubleClick"
-                 AutoGeneratingColumn="OwnersPetsDataGrid_AutoGeneratingColumn"/>
+
+        <!-- Поисковые поля -->
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                <TextBlock Text="Поиск владельца (фамилия, имя, телефон)" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBox x:Name="OwnerSearchTextBox"
+                         Padding="5"
+                         FontSize="14"
+                         TextChanged="OwnerSearchTextBox_TextChanged"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="Поиск питомца (имя, вид, порода)" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBox x:Name="PetSearchTextBox"
+                         Padding="5"
+                         FontSize="14"
+                         TextChanged="PetSearchTextBox_TextChanged"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Таблицы -->
+        <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,10,0">
+            <TextBlock Text="Владельцы" FontWeight="Bold" Margin="0,0,0,5"/>
+            <DataGrid x:Name="OwnersDataGrid"
+                      AutoGenerateColumns="True"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      GridLinesVisibility="All"
+                      HeadersVisibility="Column"
+                      AlternatingRowBackground="#F8F9FA"
+                      SelectionChanged="OwnersDataGrid_SelectionChanged"
+                      AutoGeneratingColumn="OwnersDataGrid_AutoGeneratingColumn"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1">
+            <TextBlock Text="Питомцы" FontWeight="Bold" Margin="0,0,0,5"/>
+            <DataGrid x:Name="PetsDataGrid"
+                      AutoGenerateColumns="True"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      GridLinesVisibility="All"
+                      HeadersVisibility="Column"
+                      AlternatingRowBackground="#F8F9FA"
+                      SelectionChanged="PetsDataGrid_SelectionChanged"
+                      MouseDoubleClick="PetsDataGrid_MouseDoubleClick"
+                      AutoGeneratingColumn="PetsDataGrid_AutoGeneratingColumn"/>
+        </StackPanel>
     </Grid>
 </Page>
 
