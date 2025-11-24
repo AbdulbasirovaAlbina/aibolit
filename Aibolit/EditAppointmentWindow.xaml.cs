@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows;
 using Npgsql;
 
@@ -10,6 +12,14 @@ namespace Aibolit
         private readonly DatabaseHelper dbHelper;
         private readonly DataRow dataRow;
         private int appointmentId;
+        private List<PatientItem> patients = new List<PatientItem>();
+        private int? currentPatientId;
+
+        private class PatientItem
+        {
+            public int Id { get; set; }
+            public string Display { get; set; } = string.Empty;
+        }
 
         public EditAppointmentWindow(DatabaseHelper dbHelper, DataRow row)
         {
@@ -40,6 +50,17 @@ namespace Aibolit
                 using (var conn = dbHelper.GetConnection())
                 {
                     conn.Open();
+                    using (var petCmd = new NpgsqlCommand(
+                        "SELECT ID_Pet FROM Appointment WHERE ID_Appointment = @ID", conn))
+                    {
+                        petCmd.Parameters.AddWithValue("@ID", appointmentId);
+                        var petResult = petCmd.ExecuteScalar();
+                        if (petResult != null && petResult != DBNull.Value)
+                        {
+                            currentPatientId = Convert.ToInt32(petResult);
+                        }
+                    }
+
                     using (var cmd = new NpgsqlCommand(
                         "SELECT Middle_Name FROM Veterinarian WHERE Surname = @Surname AND Name = @Name LIMIT 1", conn))
                     {
@@ -88,6 +109,32 @@ namespace Aibolit
                 {
                     ServiceComboBox.Items.Add(row["Name"].ToString());
                 }
+
+                var patientsTable = dbHelper.ExecuteQuery(@"
+                    SELECT 
+                        p.ID_Pet,
+                        p.Name AS PetName,
+                        p.View,
+                        p.Species,
+                        o.Surname AS OwnerSurname,
+                        o.Name AS OwnerName
+                    FROM Patient p
+                    JOIN Owner o ON p.ID_Owner = o.ID_Owner
+                    ORDER BY o.Surname, o.Name, p.Name");
+
+                patients = patientsTable.AsEnumerable()
+                    .Select(row => new PatientItem
+                    {
+                        Id = Convert.ToInt32(row["ID_Pet"]),
+                        Display = $"{row["PetName"]} ({row["View"]}, {row["Species"]}) — {row["OwnerSurname"]} {row["OwnerName"]}"
+                    })
+                    .ToList();
+
+                PatientComboBox.ItemsSource = patients;
+                if (currentPatientId.HasValue)
+                {
+                    PatientComboBox.SelectedValue = currentPatientId.Value;
+                }
             }
             catch (Exception ex)
             {
@@ -102,10 +149,11 @@ namespace Aibolit
                 if (DatePicker.SelectedDate == null ||
                     string.IsNullOrWhiteSpace(VeterinarianComboBox.Text) ||
                     string.IsNullOrWhiteSpace(ServiceComboBox.Text) ||
+                    PatientComboBox.SelectedValue == null ||
                     string.IsNullOrWhiteSpace(StartTimeTextBox.Text) ||
                     string.IsNullOrWhiteSpace(EndTimeTextBox.Text))
                 {
-                    MessageBox.Show("Заполните все поля", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Заполните все поля, включая выбор питомца", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -224,16 +272,19 @@ namespace Aibolit
                     }
                     
                     // Обновляем запись
+                    int petId = Convert.ToInt32(PatientComboBox.SelectedValue);
+
                     using (var cmd = new NpgsqlCommand(
                         "UPDATE Appointment SET Date = @Date, Start_Time_Appointment = @Start_Time, " +
-                        "End_Time_Appointment = @End_Time, ID_Veterinarian = @ID_Veterinarian, ID_Service = @ID_Service " +
-                        "WHERE ID_Appointment = @ID_Appointment", conn))
+                        "End_Time_Appointment = @End_Time, ID_Veterinarian = @ID_Veterinarian, ID_Service = @ID_Service, " +
+                        "ID_Pet = @ID_Pet WHERE ID_Appointment = @ID_Appointment", conn))
                     {
                         cmd.Parameters.AddWithValue("@Date", appDate);
                         cmd.Parameters.AddWithValue("@Start_Time", startTime);
                         cmd.Parameters.AddWithValue("@End_Time", endTime);
                         cmd.Parameters.AddWithValue("@ID_Veterinarian", vetId.Value);
                         cmd.Parameters.AddWithValue("@ID_Service", serviceId.Value);
+                        cmd.Parameters.AddWithValue("@ID_Pet", petId);
                         cmd.Parameters.AddWithValue("@ID_Appointment", appointmentId);
                         
                         cmd.ExecuteNonQuery();

@@ -22,11 +22,11 @@ namespace Aibolit
             {
                 string query = @"
                     SELECT 
-                        p.Name AS ""Имя питомца"",
+                        p.Name AS Имя_Питомца,
                         p.View AS Вид,
                         p.Species AS Порода,
                         p.Color AS Цвет,
-                        TO_CHAR(p.Year_Of_Birth, 'YYYY-MM-DD') AS ""Дата рождения"",
+                        TO_CHAR(p.Year_Of_Birth, 'YYYY-MM-DD') AS Дата_Рождения,
                         o.Surname || ' ' || o.Name || ' ' || COALESCE(o.Middle_Name, '') AS Владелец,
                         o.Phone AS Телефон,
                         o.Address AS Адрес,

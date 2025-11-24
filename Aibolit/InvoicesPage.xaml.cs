@@ -32,8 +32,7 @@ namespace Aibolit
                     FROM Appointment a
                     JOIN Service s ON a.ID_Service = s.ID_Service
                     JOIN Veterinarian v ON a.ID_Veterinarian = v.ID_Veterinarian
-                    JOIN Questionnaire q ON a.ID_Appointment = q.ID_Appointment
-                    JOIN Patient p ON q.ID_Pet = p.ID_Pet
+                    JOIN Patient p ON a.ID_Pet = p.ID_Pet
                     ORDER BY a.Date DESC, p.Name ASC";
                 
                 var dataTable = dbHelper.ExecuteQuery(query);

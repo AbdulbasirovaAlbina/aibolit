@@ -31,6 +31,12 @@
             
             <TextBlock Text="Название услуги *" Margin="0,5"/>
             <ComboBox x:Name="ServiceComboBox" Margin="0,5,0,15" IsEditable="True"/>
+
+            <TextBlock Text="Питомец *" Margin="0,5"/>
+            <ComboBox x:Name="PatientComboBox"
+                      Margin="0,5,0,15"
+                      DisplayMemberPath="Display"
+                      SelectedValuePath="Id"/>
             
             <TextBlock Text="Время начала *" Margin="0,5"/>
             <TextBox x:Name="StartTimeTextBox" 

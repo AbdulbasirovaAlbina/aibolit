@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows;
@@ -9,12 +10,19 @@ namespace Aibolit
     public partial class AddAppointmentWindow : Window
     {
         private DatabaseHelper dbHelper;
+        private List<PatientItem> patients = new List<PatientItem>();
 
         public AddAppointmentWindow(DatabaseHelper dbHelper)
         {
             InitializeComponent();
             this.dbHelper = dbHelper;
             LoadComboBoxes();
+        }
+
+        private class PatientItem
+        {
+            public int Id { get; set; }
+            public string Display { get; set; } = string.Empty;
         }
 
         private void LoadComboBoxes()
@@ -35,6 +43,28 @@ namespace Aibolit
                 {
                     ServiceComboBox.Items.Add(row["Name"].ToString());
                 }
+
+                var patientsTable = dbHelper.ExecuteQuery(@"
+                    SELECT 
+                        p.ID_Pet,
+                        p.Name AS PetName,
+                        p.View,
+                        p.Species,
+                        o.Surname AS OwnerSurname,
+                        o.Name AS OwnerName
+                    FROM Patient p
+                    JOIN Owner o ON p.ID_Owner = o.ID_Owner
+                    ORDER BY o.Surname, o.Name, p.Name");
+
+                patients = patientsTable.AsEnumerable()
+                    .Select(row => new PatientItem
+                    {
+                        Id = Convert.ToInt32(row["ID_Pet"]),
+                        Display = $"{row["PetName"]} ({row["View"]}, {row["Species"]}) — {row["OwnerSurname"]} {row["OwnerName"]}"
+                    })
+                    .ToList();
+
+                PatientComboBox.ItemsSource = patients;
             }
             catch (Exception ex)
             {
@@ -48,11 +78,12 @@ namespace Aibolit
             {
                 if (string.IsNullOrWhiteSpace(VeterinarianComboBox.Text) ||
                     string.IsNullOrWhiteSpace(ServiceComboBox.Text) ||
+                    PatientComboBox.SelectedValue == null ||
                     DatePicker.SelectedDate == null ||
                     string.IsNullOrWhiteSpace(StartTimeTextBox.Text) ||
                     string.IsNullOrWhiteSpace(EndTimeTextBox.Text))
                 {
-                    MessageBox.Show("Заполните все поля", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Заполните все поля, включая выбор питомца", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -84,6 +115,8 @@ namespace Aibolit
                             "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
+
+                    int petId = Convert.ToInt32(PatientComboBox.SelectedValue);
                     
                     // Парсим ФИО ветеринара
                     var nameParts = vetFullName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -167,14 +200,15 @@ namespace Aibolit
                     }
                     
                     using (var cmd = new NpgsqlCommand(
-                        "INSERT INTO Appointment (Date, Start_Time_Appointment, End_Time_Appointment, ID_Veterinarian, ID_Service) " +
-                        "VALUES (@Date, @Start_Time, @End_Time, @ID_Veterinarian, @ID_Service)", conn))
+                        "INSERT INTO Appointment (Date, Start_Time_Appointment, End_Time_Appointment, ID_Veterinarian, ID_Service, ID_Pet) " +
+                        "VALUES (@Date, @Start_Time, @End_Time, @ID_Veterinarian, @ID_Service, @ID_Pet)", conn))
                     {
                         cmd.Parameters.AddWithValue("@Date", appDate);
                         cmd.Parameters.AddWithValue("@Start_Time", startTime);
                         cmd.Parameters.AddWithValue("@End_Time", endTime);
                         cmd.Parameters.AddWithValue("@ID_Veterinarian", vetId.Value);
                         cmd.Parameters.AddWithValue("@ID_Service", serviceId.Value);
+                        cmd.Parameters.AddWithValue("@ID_Pet", petId);
                         
                         cmd.ExecuteNonQuery();
                     }

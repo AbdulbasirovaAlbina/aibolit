@@ -29,10 +29,10 @@ namespace Aibolit
                         o.Phone AS Телефон,
                         o.Address AS Адрес,
                         o.Email AS Email,
-                        p.Name AS ""Имя питомца"",
+                        p.Name AS Имя_Питомца,
                         p.View AS Вид,
                         p.Species AS Порода,
-                        TO_CHAR(p.Year_Of_Birth, 'YYYY-MM-DD') AS ""Дата рождения"",
+                        TO_CHAR(p.Year_Of_Birth, 'YYYY-MM-DD') AS Дата_Рождения,
                         p.Color AS Цвет
                     FROM Owner o
                     LEFT JOIN Patient p ON o.ID_Owner = p.ID_Owner

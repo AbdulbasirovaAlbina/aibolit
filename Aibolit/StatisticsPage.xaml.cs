@@ -45,11 +45,13 @@ namespace Aibolit
                     SELECT 
                         v.Surname AS Фамилия,
                         v.Name AS Имя,
-                        COUNT(DISTINCT q.ID_Pet) AS ""Количество пациентов""
+                        COUNT(DISTINCT a.ID_Pet) AS ""Количество пациентов"",
+                        COUNT(a.ID_Appointment) AS ""Количество приёмов""
                     FROM Veterinarian v
-                    JOIN Appointment a ON v.ID_Veterinarian = a.ID_Veterinarian
-                    JOIN Questionnaire q ON a.ID_Appointment = q.ID_Appointment
-                    WHERE a.Date >= @StartDate AND a.Date <= @EndDate
+                    LEFT JOIN Appointment a 
+                        ON v.ID_Veterinarian = a.ID_Veterinarian
+                        AND a.Date >= @StartDate
+                        AND a.Date <= @EndDate
                     GROUP BY v.Surname, v.Name
                     ORDER BY ""Количество пациентов"" DESC, v.Surname";
                 
