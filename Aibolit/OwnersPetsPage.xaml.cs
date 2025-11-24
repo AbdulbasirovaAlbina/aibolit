@@ -29,10 +29,10 @@ namespace Aibolit
                         o.Phone AS Телефон,
                         o.Address AS Адрес,
                         o.Email AS Email,
-                        p.Name AS Имя_Питомца,
+                        p.Name AS ""Имя питомца"",
                         p.View AS Вид,
                         p.Species AS Порода,
-                        TO_CHAR(p.Year_Of_Birth, 'YYYY-MM-DD') AS Дата_Рождения,
+                        TO_CHAR(p.Year_Of_Birth, 'YYYY-MM-DD') AS ""Дата рождения"",
                         p.Color AS Цвет
                     FROM Owner o
                     LEFT JOIN Patient p ON o.ID_Owner = p.ID_Owner
@@ -82,6 +82,11 @@ namespace Aibolit
                     MessageBox.Show($"Ошибка при открытии окна редактирования: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        private void OwnersPetsDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGridColumnFormatter.Apply(e);
         }
     }
 }

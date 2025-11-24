@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\git\aibolit\Aibolit\obj\Debug\
+C:\Users\Adelinaa\OneDrive\Документы\GitHub\aibolit\Aibolit\obj\Debug\
 Aibolit
 none
 false
 DEBUG;TRACE
-C:\git\aibolit\Aibolit\App.xaml
-17-1208199158
+C:\Users\Adelinaa\OneDrive\Документы\GitHub\aibolit\Aibolit\App.xaml
+18-1076670211
 
-23-1148540637
-30-1437321732
-MainWindow.xaml;LoginPage.xaml;MainPage.xaml;OwnersPetsPage.xaml;AppointmentsPage.xaml;PatientCardsPage.xaml;InvoicesPage.xaml;StatisticsPage.xaml;ServicesPage.xaml;AddOwnerPetWindow.xaml;EditOwnerPetWindow.xaml;AddAppointmentWindow.xaml;UpdateAppointmentTimeWindow.xaml;DeleteAppointmentWindow.xaml;EditAppointmentWindow.xaml;AddServiceWindow.xaml;EditServiceWindow.xaml;
+251404657914
+30-433014868
+MainWindow.xaml;LoginPage.xaml;MainPage.xaml;OwnersPetsPage.xaml;AppointmentsPage.xaml;PatientCardsPage.xaml;InvoicesPage.xaml;StatisticsPage.xaml;ServicesPage.xaml;AddOwnerPetWindow.xaml;EditOwnerPetWindow.xaml;AddAppointmentWindow.xaml;UpdateAppointmentTimeWindow.xaml;DeleteAppointmentWindow.xaml;EditAppointmentWindow.xaml;AddServiceWindow.xaml;EditServiceWindow.xaml;RegisterWindow.xaml;
 
-False
+True
 

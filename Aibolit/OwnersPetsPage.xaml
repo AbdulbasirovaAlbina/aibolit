@@ -89,7 +89,8 @@
                  GridLinesVisibility="All"
                  HeadersVisibility="Column"
                  AlternatingRowBackground="#F8F9FA"
-                 MouseDoubleClick="OwnersPetsDataGrid_MouseDoubleClick"/>
+                 MouseDoubleClick="OwnersPetsDataGrid_MouseDoubleClick"
+                 AutoGeneratingColumn="OwnersPetsDataGrid_AutoGeneratingColumn"/>
     </Grid>
 </Page>
 

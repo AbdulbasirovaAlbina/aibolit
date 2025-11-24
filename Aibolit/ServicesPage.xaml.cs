@@ -55,12 +55,7 @@ namespace Aibolit
 
         private void ServicesDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            // Скрываем колонку ID_Service
-            if (e.Column.Header.ToString() == "ID_Service" || 
-                e.Column.Header.ToString() == "Id_Service")
-            {
-                e.Column.Visibility = Visibility.Collapsed;
-            }
+            DataGridColumnFormatter.Apply(e);
         }
 
         private void ServicesDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

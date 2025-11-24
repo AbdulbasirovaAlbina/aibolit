@@ -75,7 +75,8 @@
                  SelectionMode="Single"
                  GridLinesVisibility="All"
                  HeadersVisibility="Column"
-                 AlternatingRowBackground="#F8F9FA"/>
+                 AlternatingRowBackground="#F8F9FA"
+                 AutoGeneratingColumn="StatisticsDataGrid_AutoGeneratingColumn"/>
     </Grid>
 </Page>
 

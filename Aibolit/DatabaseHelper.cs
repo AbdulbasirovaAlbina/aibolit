@@ -60,6 +60,37 @@ namespace Aibolit
             }
         }
 
+        public bool RegisterUser(string username, string password, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(
+                        "INSERT INTO user_cooperator (username, password) VALUES (@username, @password)",
+                        conn))
+                    {
+                        cmd.Parameters.AddWithValue("@username", username);
+                        cmd.Parameters.AddWithValue("@password", password);
+                        cmd.ExecuteNonQuery();
+                        return true;
+                    }
+                }
+            }
+            catch (PostgresException ex) when (ex.SqlState == "23505")
+            {
+                errorMessage = "Пользователь с таким именем уже существует";
+                return false;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Не удалось создать пользователя: {ex.Message}";
+                return false;
+            }
+        }
+
         public DataTable ExecuteQuery(string query, params NpgsqlParameter[] parameters)
         {
             DataTable dt = new DataTable();

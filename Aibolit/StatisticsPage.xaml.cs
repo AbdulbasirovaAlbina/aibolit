@@ -45,13 +45,13 @@ namespace Aibolit
                     SELECT 
                         v.Surname AS Фамилия,
                         v.Name AS Имя,
-                        COUNT(DISTINCT q.ID_Pet) AS Количество_Пациентов
+                        COUNT(DISTINCT q.ID_Pet) AS ""Количество пациентов""
                     FROM Veterinarian v
                     JOIN Appointment a ON v.ID_Veterinarian = a.ID_Veterinarian
                     JOIN Questionnaire q ON a.ID_Appointment = q.ID_Appointment
                     WHERE a.Date >= @StartDate AND a.Date <= @EndDate
                     GROUP BY v.Surname, v.Name
-                    ORDER BY Количество_Пациентов DESC, v.Surname";
+                    ORDER BY ""Количество пациентов"" DESC, v.Surname";
                 
                 var dataTable = dbHelper.ExecuteQuery(query, 
                     new NpgsqlParameter("@StartDate", startDate.Value.Date),
@@ -83,6 +83,11 @@ namespace Aibolit
             {
                 LoadData();
             }
+        }
+
+        private void StatisticsDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGridColumnFormatter.Apply(e);
         }
     }
 }

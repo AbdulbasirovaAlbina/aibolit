@@ -48,6 +48,23 @@ namespace Aibolit
             ErrorTextBlock.Text = message;
             ErrorTextBlock.Visibility = Visibility.Visible;
         }
+
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+            var registerWindow = new RegisterWindow(dbHelper)
+            {
+                Owner = Window.GetWindow(this)
+            };
+
+            if (registerWindow.ShowDialog() == true)
+            {
+                UsernameTextBox.Text = registerWindow.CreatedUsername;
+                PasswordBox.Password = string.Empty;
+                ErrorTextBlock.Visibility = Visibility.Collapsed;
+                MessageBox.Show("Пользователь создан. Введите пароль для входа.", "Регистрация",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
     }
 }
 

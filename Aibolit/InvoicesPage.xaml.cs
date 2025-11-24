@@ -22,10 +22,10 @@ namespace Aibolit
             {
                 string query = @"
                     SELECT 
-                        'ЧЕК № ' || a.ID_Appointment AS Номер_Чека,
+                        'ЧЕК № ' || a.ID_Appointment AS ""Номер чека"",
                         'Дата: ' || TO_CHAR(a.Date, 'YYYY-MM-DD') AS Дата,
                         'Ветеринар: ' || v.Surname || ' ' || v.Name || ' ' || v.Middle_Name AS Ветеринар,
-                        'Пациент: ' || p.Name || ' (вид: ' || p.View || ', порода: ' || p.Species || ')' AS Информация_О_Питомце,
+                        'Пациент: ' || p.Name || ' (вид: ' || p.View || ', порода: ' || p.Species || ')' AS ""Информация о питомце"",
                         'Услуга: ' || s.Name AS Услуга,
                         'Описание: ' || s.Description AS Описание,
                         'Стоимость: ' || TO_CHAR(s.Cost, '99999.99') || ' руб.' AS Стоимость
@@ -48,6 +48,11 @@ namespace Aibolit
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             LoadData();
+        }
+
+        private void InvoicesDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGridColumnFormatter.Apply(e);
         }
     }
 }

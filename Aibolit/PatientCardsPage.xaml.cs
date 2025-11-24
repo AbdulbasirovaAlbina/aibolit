@@ -22,11 +22,11 @@ namespace Aibolit
             {
                 string query = @"
                     SELECT 
-                        p.Name AS Имя_Питомца,
+                        p.Name AS ""Имя питомца"",
                         p.View AS Вид,
                         p.Species AS Порода,
                         p.Color AS Цвет,
-                        TO_CHAR(p.Year_Of_Birth, 'YYYY-MM-DD') AS Дата_Рождения,
+                        TO_CHAR(p.Year_Of_Birth, 'YYYY-MM-DD') AS ""Дата рождения"",
                         o.Surname || ' ' || o.Name || ' ' || COALESCE(o.Middle_Name, '') AS Владелец,
                         o.Phone AS Телефон,
                         o.Address AS Адрес,
@@ -64,6 +64,11 @@ namespace Aibolit
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             LoadData();
+        }
+
+        private void PatientCardsDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGridColumnFormatter.Apply(e);
         }
     }
 }

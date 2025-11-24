@@ -59,7 +59,8 @@
                  GridLinesVisibility="All"
                  HeadersVisibility="Column"
                  AlternatingRowBackground="#F8F9FA"
-                 CanUserResizeColumns="True"/>
+                 CanUserResizeColumns="True"
+                 AutoGeneratingColumn="InvoicesDataGrid_AutoGeneratingColumn"/>
     </Grid>
 </Page>
 
